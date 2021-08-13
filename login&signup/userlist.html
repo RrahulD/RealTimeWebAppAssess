@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+		content="width=device-width,
+				initial-scale=1,
+				shrink-to-fit=no">
+<title>
+	userlist
+</title>
+
+<!-- Include Bootstrap for styling -->
+<!-- <link rel="stylesheet"
+		href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- Include the Bootstrap Table CSS
+for the table -->
+<link rel="stylesheet"
+		href=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css"> 
+</head>
+<style>
+	body{
+		background-color: mediumpurple;
+		color: whitesmoke;
+	}
+</style>
+<body>
+<div class="container" id ="user">
+	<table id ="user" class="table-striped border-success" border="1">
+		<thead >
+		<tr>
+			<th data-field="id">
+			<span class="text-success">
+				ID
+			</span>
+			</th>
+			<th data-field="email">
+			<span class="text-success">
+				Email
+			</span>
+			</th>
+			<th data-field="password">
+			<span class="text-success">
+				Password
+			</span>
+			</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+<div class="add">
+	Username:  
+        <input type="text" id = "Username"> <br/>
+    Password:   
+        <input type ="password" id = "Password">  <br/>
+    <input type ="submit" value = "Add" onclick="add()" ><br/><br/>
+</div>
+<div class="delete">
+	<input type ="text" id = "delete">  <br/>
+    <input type ="submit" value = "Delete" onclick="remove()" ><br/><br/>
+</div>
+<div class="update">
+	<input type ="text" id = "edit">  <input type ="submit" value = "Edit" onclick="rowno()" ><br/><br/>
+	<div class='inputWrapper'>
+	Id:
+	<input type="text" id = "id1"> <br/>
+	Username:  
+        <input type="text" id = "username1"> <br/>
+    Password:   
+        <input type ="text" id = "password1">  <br/>
+	</div>
+    <input type ="submit" value = "Update" onclick="update()" ><br/><br/>
+</div>
+
+
+
+<!-- Include jQuery and other required
+files for Bootstrap -->
+<script src=
+"https://code.jquery.com/jquery-3.3.1.min.js">
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+</script>
+<script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+</script>
+
+<!-- Include the JavaScript file
+for Bootstrap table -->
+<script src=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js">
+</script>
+<script type="text/javascript">
+    const api_url =
+	'http://localhost:8000/api/users';
+
+	// Specify the JSON data to be displayed
+	
+getapi(api_url)
+async function getapi(url) {
+	const response = await fetch(url);
+	
+
+	var data = await response.json();
+	console.log(data);
+	$(document).ready(function () {
+
+// Use the given data to create
+// the table and display it
+$('table').bootstrapTable({
+    data: data
+});
+});
+}
+
+// function show(data) {
+// 	let tab =
+// 		`<tr>
+// 		<th>ID</th>
+// 		<th>Email</th>
+// 		<th>Password</th>
+// 		</tr>`;
+	
+	
+// 	for (let r of data) {
+// 		tab += `<tr>
+// 	<td>${r.id} </td>
+// 	<td>${r.email}</td>
+// 	<td>${r.password}</td>	
+// </tr>`;
+// 	}
+// 	document.getElementById("userlist").innerHTML = tab;
+// }
+
+    
+    // var mydata =
+	// [
+	// 	{
+	// 	"id": "24323",
+	// 	"name": "Mark Smith",
+	// 	"date": "25/5/2020"
+	// 	},
+	// 	{
+	// 	"id": "24564",
+	// 	"name": "Caitlin MacDonald",
+	// 	"date": "17/5/2020"
+	// 	},
+	// 	{
+	// 	"id": "24345",
+	// 	"name": "Jessie Johnson ",
+	// 	"date": "1/5/2020"
+	// 	},
+	// 	{
+	// 	"id": "24874",
+	// 	"name": "Alen Williams",
+	// 	"date": "14/5/2020"
+	// 	},
+	// 	{
+	// 	"id": "24323",
+	// 	"name": "Maria Garcia ",
+	// 	"date": "13/5/2020"
+	// 	}
+	// ];
+	async function remove(){
+		var id = document.getElementById("delete").value;	
+		const apiUrl = 'http://localhost:8000/api/users';
+      const response= await fetch(apiUrl + "/" + id, {
+        method: 'DELETE'
+  })
+  
+    const response1 = await fetch(apiUrl);
+	var data = await response1.json();
+	console.log(data);
+	$(document).ready(function () {
+
+// Use the given data to create
+// the table and display it
+$('table').bootstrapTable({
+    data: data
+});
+});
+window.location.reload();
+}
+
+async function add()
+{
+	    var name = document.getElementById("Username").value;
+        var passw= document.getElementById("Password").value;
+            const url = 'http://localhost:8000/api/users'
+            const data = {email:name,password: passw}
+            console.log(data)
+            const params = {
+                     body:JSON.stringify(data),
+                      method:"POST",
+                     }
+            fetch(url,params).then(data => {
+                       return data.json()
+                   }).then(res => {
+                        console.log(res);
+                   }).catch(error =>{
+                        console.log(error)
+                   })
+            
+            const wp =`"${passw}"`;
+            console.log(wp);
+			const response = await fetch(url);
+	
+
+	var data1 = await response.json();
+	console.log(data1);
+	$(document).ready(function () {
+
+// Use the given data to create
+// the table and display it
+$('table').bootstrapTable({
+    data: data
+});
+});
+window.location.reload();
+ }
+
+ async function update(){
+		var id = document.getElementById("edit").value;	
+		var name = document.getElementById("username1").value;
+        var passw= document.getElementById("password1").value;
+            const apiUrl = 'http://localhost:8000/api/users'
+            const data = {email:name,password: passw}
+			const params = {
+                     body:JSON.stringify(data),
+                      method:"PUT",
+                     }
+            fetch(apiUrl + "/" + id,params).then(data => {
+                       return data.json()
+                   }).then(res => {
+                        console.log(res);
+                   }).catch(error =>{
+                        console.log(error)
+                   })
+            
+            const wp =`"${passw}"`;
+            console.log(wp);
+			const response = await fetch(apiUrl);
+	
+
+	var data1 = await response.json();
+	console.log(data1);
+	$(document).ready(function () {
+
+// Use the given data to create
+// the table and display it
+$('table').bootstrapTable({
+    data: data
+});
+});
+window.location.reload();
+}
+
+
+
+function rowno(){
+	$('#user tr').click(function(event) {
+      $('td', this).each(function(i) {
+        $('.inputWrapper input').eq(i).val(this.textContent);
+      });
+    });}
+
+</script>
+</body>
+</html>
